@@ -10,9 +10,11 @@ from .serializers import PostSerializer
 
 
 class PostView(APIView, PaginationHandlerMixin):
+    pagination_class = BasePagination
     def get(self, request):
         posts= PostModel.objects.all().order_by('-created_at')
-        serializer = PostSerializer(posts, many=True)
+        paged_posts = self.paginate_queryset(posts)
+        serializer = PostSerializer(paged_posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     def post(self, request):
         serializer = PostSerializer(data=request.data)
