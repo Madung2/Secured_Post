@@ -20,7 +20,6 @@ class PostSerializer(serializers.ModelSerializer):
     def validate(self, data):
         password= data['password']
         default_len=6
-        print("%%%%%%%")
 
 
         if not has_numbers(password): #비밀번호에 숫자가 없는 경우
@@ -36,3 +35,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostModel
         fields = '__all__'
+
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }

@@ -13,18 +13,18 @@ from post.services.post_service import get_post, create_post, put_post
 class PostView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
     def get(self, request):
-        get_post_serializer = get_post(self)
-        return Response(get_post_serializer)
+        get_serializer = get_post(self)
+        
+        return Response(get_serializer)
 
     def post(self, request):
-        create_post_serializer = create_post(request)
-        return Response(create_post_serializer, status=status.HTTP_200_OK)
+        create_serializer = create_post(request)
+        return Response(create_serializer, status=status.HTTP_200_OK)
 
     
     def put(self, request, id):
-        put_post_serializer = put_post(request, id)
-        return Response(put_post_serializer, status=status.HTTP_200_OK)       
-
+        put_serializer = put_post(request, id)
+        return Response(put_serializer, status=status.HTTP_200_OK)       
 
     def delete(self, request, pk):
         pass
