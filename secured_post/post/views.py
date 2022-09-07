@@ -6,29 +6,25 @@ from secured_posts.pagination import PaginationHandlerMixin, BasePagination
 from .models import Post as PostModel
 from .serializers import PostSerializer
 
+from post.services.post_service import get_post, create_post, put_post
 # Create your views here.
 
 
 class PostView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
     def get(self, request):
-        posts= PostModel.objects.all().order_by('-created_at')
-        paged_posts = self.paginate_queryset(posts)
-        serializer = PostSerializer(paged_posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        get_post_serializer = get_post(self)
+        return Response(get_post_serializer)
+
     def post(self, request):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        create_post_serializer = create_post(request)
+        return Response(create_post_serializer, status=status.HTTP_200_OK)
+
+    
     def put(self, request, id):
-        post= PostModel.objects.get(id=id)
-        serializer = PostSerializer(post,data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        put_post_serializer = put_post(request, id)
+        return Response(put_post_serializer, status=status.HTTP_200_OK)       
+
 
     def delete(self, request, pk):
         pass

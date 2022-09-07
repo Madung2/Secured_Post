@@ -22,6 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
         default_len=6
         print("%%%%%%%")
 
+
         if not has_numbers(password): #비밀번호에 숫자가 없는 경우
             raise serializers.ValidationError(detail={"detail": "비밀번호에 숫자를 포함해주세요"})
         if len(password)<default_len:
