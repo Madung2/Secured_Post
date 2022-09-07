@@ -7,14 +7,16 @@ from .models import Post as PostModel
 from .serializers import PostSerializer
 
 from post.services.post_service import get_post, create_post, put_post, delete_post
-# Create your views here.
 
 
 class PostView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
     def get(self, request):
         get_serializer = get_post(self)
-        return Response(get_serializer)
+        print(get_serializer)
+        if get_serializer:
+            return Response(get_serializer, status=status.HTTP_200_OK)
+        return Response({"detail" : "정확한 페이지를 입력해주세요"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         create_serializer = create_post(request)
@@ -26,5 +28,5 @@ class PostView(APIView, PaginationHandlerMixin):
         return Response(put_serializer, status=status.HTTP_200_OK)       
 
     def delete(self, request, id):
-        delete_serializer = delete_post(request, id)
-        return Response(delete_serializer, status=status.HTTP_200_OK)   
+        delete_result = delete_post(request, id)
+        return Response(delete_result, status=status.HTTP_200_OK)

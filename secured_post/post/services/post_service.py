@@ -34,3 +34,4 @@ def delete_post(request, id):
     if check_password(request.data['password'], post.password):
         post.delete()
 
+
