@@ -27,4 +27,10 @@ def put_post(request, id):
             return serializer.data
         return serializer.errors
     return "통과 안했습니다"
-    # return serializer.errors
+
+
+def delete_post(request, id):
+    post= PostModel.objects.get(id=id)
+    if check_password(request.data['password'], post.password):
+        post.delete()
+
