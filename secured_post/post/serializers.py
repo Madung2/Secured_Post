@@ -20,13 +20,18 @@ class PostSerializer(serializers.ModelSerializer):
     def validate(self, data):
         password= data['password']
         default_len=6
+        print("%%%%%%%")
 
         if not has_numbers(password): #비밀번호에 숫자가 없는 경우
             raise serializers.ValidationError(detail={"detail": "비밀번호에 숫자를 포함해주세요"})
         if len(password)<default_len:
             raise serializers.ValidationError(detail={"detail": "비밀번호는 6자리 이상이어야 합니다"})
-
         return data
+    
+    # def update(self, instance, validated_data):
+    #     instance.save()
+    #     return instance
+    
     class Meta:
         model = PostModel
         fields = '__all__'
