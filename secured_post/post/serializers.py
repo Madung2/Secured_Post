@@ -2,17 +2,7 @@ from rest_framework import serializers
 from .models import Post as PostModel
 from django.contrib.auth.hashers import make_password
 
-
-def has_numbers(inputs):
-    """문자열에 숫자가 있는지 여부 체크
-
-    Args:
-        inputs (_type_): _description_
-
-    Returns:
-        _type_: bool
-    """        
-    return any(char.isdigit() for char in inputs)
+from post.services.post_service import has_numbers
 
 class UpdatePostSerializer(serializers.ModelSerializer):
     class Meta:

@@ -21,7 +21,6 @@ class PostView(APIView, PaginationHandlerMixin):
         create_serializer = create_post(request)
         if create_serializer:
             return Response(create_serializer)
-        # elif create_serializer
 
     
     def put(self, request, id):
