@@ -13,24 +13,23 @@ def has_numbers(inputs):
     """        
     return any(char.isdigit() for char in inputs)
 
+class UpdatePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostModel
+        fields = ['id','title', 'content', 'created_at', 'updated_at']
+
 
 class PostSerializer(serializers.ModelSerializer):
-
     
     def validate(self, data):
         password= data['password']
         default_len=6
 
-
-        if not has_numbers(password): #비밀번호에 숫자가 없는 경우
+        if not has_numbers(password): 
             raise serializers.ValidationError(detail={"detail": "비밀번호에 숫자를 포함해주세요"})
         if len(password)<default_len:
             raise serializers.ValidationError(detail={"detail": "비밀번호는 6자리 이상이어야 합니다"})
         return data
-    
-    # def update(self, instance, validated_data):
-    #     instance.save()
-    #     return instance
     
     class Meta:
         model = PostModel

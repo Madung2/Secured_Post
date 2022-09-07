@@ -1,6 +1,6 @@
-from post.serializers import PostSerializer
+from django.contrib.auth.hashers import make_password, check_password
+from post.serializers import PostSerializer, UpdatePostSerializer
 from post.models import Post as PostModel
-
 
 
 def get_post(self):
@@ -10,6 +10,7 @@ def get_post(self):
     return serializer
 
 def create_post(request):
+    request.data['password'] = make_password(request.data['password'])
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -18,8 +19,12 @@ def create_post(request):
 
 def put_post(request, id):
     post= PostModel.objects.get(id=id)
-    serializer = PostSerializer(post,data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return serializer.data
-    return serializer.errors
+
+    if check_password(request.data['password'],post.password):
+        serializer = UpdatePostSerializer(post,data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return serializer.data
+        return serializer.errors
+    return "통과 안했습니다"
+    # return serializer.errors

@@ -14,7 +14,6 @@ class PostView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
     def get(self, request):
         get_serializer = get_post(self)
-        
         return Response(get_serializer)
 
     def post(self, request):

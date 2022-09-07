@@ -3,10 +3,10 @@ from rest_framework.pagination import PageNumberPagination
 
 class BasePagination(PageNumberPagination):
     # 페이지 사이즈를 지정할 query_param 문자열 지정 ex) /?page_size=5&p=1
-    page_query_param = 'p'
+    page_query_param = 'page'
     page_size_query_param = 'page_size'
     page_size = 20
-    max_page_size = 40
+    max_page_size = 20
 
 
 
