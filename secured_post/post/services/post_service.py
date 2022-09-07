@@ -10,7 +10,6 @@ def get_post(self):
     return serializer
 
 def create_post(request):
-    request.data['password'] = make_password(request.data['password'])
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

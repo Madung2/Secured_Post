@@ -11,16 +11,16 @@ from post.services.post_service import get_post, create_post, put_post, delete_p
 
 class PostView(APIView, PaginationHandlerMixin):
     pagination_class = BasePagination
-    def get(self, request):
+    def get(self):
         get_serializer = get_post(self)
-        print(get_serializer)
         if get_serializer:
             return Response(get_serializer, status=status.HTTP_200_OK)
         return Response({"detail" : "정확한 페이지를 입력해주세요"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         create_serializer = create_post(request)
-        return Response(create_serializer, status=status.HTTP_200_OK)
+        if create_serializer:
+            return Response(create_serializer)
 
     
     def put(self, request, id):
