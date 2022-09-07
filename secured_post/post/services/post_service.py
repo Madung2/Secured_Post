@@ -1,7 +1,16 @@
+from logging import raiseExceptions
 from django.contrib.auth.hashers import make_password, check_password
 from post.serializers import PostSerializer, UpdatePostSerializer
 from post.models import Post as PostModel
 
+def has_valid_password(request, id):
+    post= PostModel.objects.get(id=id)
+    return check_password(request.data['password'],post.password)
+
+def has_valid_post_id(id):
+    if PostModel.objects.get(id=id):
+        return True
+    return False
 
 def get_post(self):
     posts= PostModel.objects.all().order_by('-created_at')
@@ -11,26 +20,20 @@ def get_post(self):
 
 def create_post(request):
     serializer = PostSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return serializer.data
-    return serializer.errors
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
 
 def put_post(request, id):
     post= PostModel.objects.get(id=id)
+    serializer = UpdatePostSerializer(post,data=request, partial=True)     
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
 
-    if check_password(request.data['password'],post.password):
-        serializer = UpdatePostSerializer(post,data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return serializer.data
-        return serializer.errors
-    return "통과 안했습니다"
 
 
 def delete_post(request, id):
     post= PostModel.objects.get(id=id)
-    if check_password(request.data['password'], post.password):
-        post.delete()
+    post.delete()
 
 
